@@ -6,6 +6,7 @@
 import matplotlib
 from matplotlib.collections import LineCollection
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 def use_custom_matplotlib_formatting():
