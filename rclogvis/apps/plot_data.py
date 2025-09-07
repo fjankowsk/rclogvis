@@ -1,3 +1,10 @@
+#
+#   2025 Fabian Jankowski
+#   Plot telemetry log data.
+#
+
+import argparse
+
 import matplotlib
 from matplotlib.collections import LineCollection
 import matplotlib.pyplot as plt
@@ -23,6 +30,28 @@ def use_custom_matplotlib_formatting():
     matplotlib.rcParams["ytick.major.width"] = 1.5
     matplotlib.rcParams["ytick.minor.size"] = 4
     matplotlib.rcParams["ytick.minor.width"] = 1.5
+
+
+def parse_args():
+    """
+    Parse the commandline arguments.
+
+    Returns
+    -------
+    args: populated namespace
+        The commandline arguments.
+    """
+
+    parser = argparse.ArgumentParser(
+        description="Plot telemetry log data.",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+
+    parser.add_argument("filename", type=str, help="Filename to process.")
+
+    args = parser.parse_args()
+
+    return args
 
 
 def plot_time_series(df, fields, title=""):
@@ -79,10 +108,12 @@ def plot_gps_trajectory(df):
 
 
 def main():
+    # handle command line arguments
+    args = parse_args()
+
     use_custom_matplotlib_formatting()
 
-    filename = "a.csv"
-    df = pd.read_csv(filename)
+    df = pd.read_csv(args.filename)
 
     print(df.columns)
 
