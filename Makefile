@@ -27,6 +27,6 @@ install:
 	${MAKE} clean
 
 uninstall:
-	${PIP} uninstall --yes scatfit
+	${PIP} uninstall --yes rclogvis
 
 .PHONY: help black clean install uninstall
