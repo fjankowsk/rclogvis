@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from rclogvis.gps import create_gpx_file
 from rclogvis.plotting import (
     use_custom_matplotlib_formatting,
     plot_time_series,
@@ -103,6 +104,9 @@ def main():
 
     # gps trajectory
     plot_gps_trajectory(df)
+
+    # output gpx file
+    create_gpx_file(df)
 
     plt.show()
 
