@@ -12,3 +12,24 @@ The easiest and recommended way to install the software is via the Python comman
 `pip install git+https://github.com/fjankowsk/rclogvis.git@master`
 
 This will automatically install all dependencies. Depending on your Python installation, you might want to replace `pip` with `pip3` in the above command.
+
+## Usage ##
+
+```console
+$ rclogvis-plot -h
+usage: rclogvis-plot [-h] filename
+
+Plot telemetry log data.
+
+positional arguments:
+  filename    Filename to process.
+
+options:
+  -h, --help  show this help message and exit
+```
+
+`Filename` is a CSV file with the telemetry logging output from the EdgeTX or OpenTX radio remote control handset.
+
+## GPX File Export ##
+
+`rclogvis` converts the GPS information in the telemetry logs into a GPX file that can be visualised using more sophisticated GIS tools, such as [qmapshack](https://github.com/Maproom/qmapshack) or Google Earth.
