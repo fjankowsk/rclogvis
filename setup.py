@@ -33,6 +33,7 @@ setup(
     license="MIT",
     packages=find_packages(),
     install_requires=[
+        "gpxpy",
         "matplotlib",
         "numpy",
         "pandas",

@@ -8,11 +8,12 @@ import gpxpy.gpx
 
 def create_gpx_file(df):
     gpx = gpxpy.gpx.GPX()
-    gpx.name = ""
-    gpx.description = ""
+    gpx.name = "GPS Data Export"
+    gpx.description = "Export of the RC GPS data"
 
     # track
     gpx_track = gpxpy.gpx.GPXTrack()
+    gpx_track.name = "Track"
     gpx.tracks.append(gpx_track)
 
     # segment
