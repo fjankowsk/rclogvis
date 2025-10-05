@@ -55,6 +55,9 @@ def main():
     print(df.columns)
 
     df["datetime"] = pd.to_datetime(df["Date"] + " " + df["Time"])
+    # localise
+    # XXX: we must change this depending on actual local timezone
+    df["datetime"] = df["datetime"].dt.tz_localize("Europe/Paris")
     df["flighttime"] = (
         df["datetime"] - df["datetime"].iat[0]
     ).dt.total_seconds() / 60.0

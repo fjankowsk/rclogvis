@@ -4,12 +4,18 @@
 #
 
 import gpxpy.gpx
+import pandas as pd
+from xml.etree import ElementTree
 
 
 def create_gpx_file(df):
     gpx = gpxpy.gpx.GPX()
     gpx.name = "GPS Data Export"
     gpx.description = "Export of the RC GPS data"
+    gpx.time = pd.Timestamp.utcnow().round("s")
+
+    # add extension namespace
+    gpx.nsmap["gpxtpx"] = "http://www.garmin.com/xmlschemas/TrackPointExtension/v2"
 
     # track
     gpx_track = gpxpy.gpx.GPXTrack()
@@ -20,16 +26,33 @@ def create_gpx_file(df):
     gpx_segment = gpxpy.gpx.GPXTrackSegment()
     gpx_track.segments.append(gpx_segment)
 
+    # date conversion
+    _timestamps = df["datetime"].dt.tz_convert("UTC")
+    _timestamps = _timestamps.dt.round("s")
+
+    # km/h -> m/s
+    _speeds = df["GSpd(kmh)"] / 3.6
+
     # track points
     for i in range(len(df.index)):
-        gpx_segment.points.append(
-            gpxpy.gpx.GPXTrackPoint(
-                df["latitude"].iloc[i],
-                df["longitude"].iloc[i],
-                elevation=df["Alt(m)"].iloc[i],
-                time=df["datetime"].iloc[i],
-            )
+        _point = gpxpy.gpx.GPXTrackPoint(
+            df["latitude"].iloc[i],
+            df["longitude"].iloc[i],
+            elevation=df["Alt(m)"].iloc[i],
+            time=_timestamps.iloc[i],
         )
 
+        # add speed extension
+        _speed = _speeds.iloc[i]
+        _extension = ElementTree.fromstring(
+            f"""<gpxtpx:TrackPointExtension xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v2">
+            <gpxtpx:speed>{_speed:.1f}</gpxtpx:speed>
+            </gpxtpx:TrackPointExtension>
+        """
+        )
+        _point.extensions.append(_extension)
+
+        gpx_segment.points.append(_point)
+
     with open("export.gpx", "w") as fd:
-        fd.write(gpx.to_xml())
+        fd.write(gpx.to_xml(version="1.1"))
