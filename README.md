@@ -32,4 +32,4 @@ options:
 
 ## GPX File Export ##
 
-`rclogvis` converts the GPS information in the telemetry logs into a GPX file that can be visualised using more sophisticated GIS tools, such as [qmapshack](https://github.com/Maproom/qmapshack) or Google Earth.
+`rclogvis` converts the GPS information in the telemetry logs into a GPX file that can be visualised using more sophisticated GIS tools, such as [qmapshack](https://github.com/Maproom/qmapshack) or Google Earth. It creates a file called "export.gpx" in the current working directory by default.
