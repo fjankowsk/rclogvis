@@ -14,6 +14,7 @@ from rclogvis.plotting import (
     use_custom_matplotlib_formatting,
     plot_time_series,
     plot_gps_trajectory,
+    plot_histograms,
 )
 
 
@@ -85,10 +86,18 @@ def main():
 
     plot_time_series(df, fields, title="Control Link")
 
+    fields = ["1RSS(dB)", "RQly(%)", "RSNR(dB)", "TRSS(dB)"]
+
+    plot_histograms(df, fields, title="Control Link Histograms")
+
     # battery
     fields = ["RxBt(V)", "Curr(A)", "Capa(mAh)", "Bat%(%)", "FM"]
 
     plot_time_series(df, fields, title="Battery")
+
+    fields = ["Curr(A)", "Ptch(deg)", "GSpd(kmh)"]
+
+    plot_histograms(df, fields, title="Battery Histograms")
 
     # gps
     fields = ["GSpd(kmh)", "Hdg(°)", "Alt(m)", "Sats"]

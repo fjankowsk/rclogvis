@@ -116,3 +116,25 @@ def plot_gps_trajectory(df):
     ax.set_ylim(ymin, ymax)
 
     fig.tight_layout()
+
+
+def plot_histograms(df, fields, title=""):
+    figsize = (6.4, 7.0)
+    fig, axs = plt.subplots(figsize=figsize, nrows=len(fields))
+
+    for i, _label in enumerate(fields):
+        axs[i].hist(
+            df[_label], bins="auto", density=True, histtype="step", lw=2, zorder=3
+        )
+        axs[i].grid()
+
+        axs[i].axvline(x=df[_label].median(), color="C1", ls="dashed", lw=2, zorder=4)
+
+        _nice_label = _label.replace("(", " (")
+        axs[i].set_xlabel(_nice_label)
+        axs[i].set_ylabel("PDF")
+
+    fig.suptitle(title)
+
+    fig.align_ylabels()
+    fig.tight_layout()
