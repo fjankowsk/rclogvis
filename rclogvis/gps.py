@@ -41,6 +41,7 @@ def create_gpx_file(df):
             elevation=df["Alt(m)"].iloc[i],
             time=_timestamps.iloc[i],
         )
+        _point.satellites = df["Sats"].iloc[i]
 
         # add speed extension
         _speed = _speeds.iloc[i]
