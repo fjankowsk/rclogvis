@@ -12,10 +12,10 @@ zip-safe = true
 name = "rclogvis"
 dynamic = ["version"]
 dependencies = [
-    "gpxpy",
-    "matplotlib",
-    "numpy",
-    "pandas",
+  "gpxpy",
+  "matplotlib",
+  "numpy",
+  "pandas",
 ]
 authors = [
   { name="Fabian Jankowski", email="fjankowsk@gmail.com" }
@@ -28,12 +28,19 @@ readme = "README.md"
 requires-python = ">=3.9"
 keywords = ["remote-control", "uav", "drone", "logs", "visualisation", "data-analysis", "edgetx"]
 classifiers = [
-    "Development Status :: 5 - Production/Stable",
-    "Programming Language :: Python :: 3",
-    "Operating System :: OS Independent",
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
 ]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
+
+[project.optional-dependencies]
+develop = [
+  "black",
+  "build",
+  "twine",
+]
 
 [project.scripts]
 rclogvis-plot = "rclogvis.apps.plot_data:main"
