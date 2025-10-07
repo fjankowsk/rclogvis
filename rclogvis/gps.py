@@ -57,3 +57,36 @@ def create_gpx_file(df):
 
     with open("export.gpx", "w") as fd:
         fd.write(gpx.to_xml(version="1.1"))
+
+
+def get_distances(df):
+    gpx = gpxpy.gpx.GPX()
+
+    # track
+    gpx_track = gpxpy.gpx.GPXTrack()
+    gpx.tracks.append(gpx_track)
+
+    # segment
+    gpx_segment = gpxpy.gpx.GPXTrackSegment()
+    gpx_track.segments.append(gpx_segment)
+
+    # track points
+    for i in range(len(df.index)):
+        _point = gpxpy.gpx.GPXTrackPoint(
+            df["latitude"].iloc[i],
+            df["longitude"].iloc[i],
+            elevation=df["Alt(m)"].iloc[i],
+        )
+
+        gpx_segment.points.append(_point)
+
+    # cumulative distance travelled
+    _data = gpx.get_points_data()
+    cum_dists = [item.distance_from_start for item in _data]
+
+    # distance from home
+    # XXX: maybe average the first X points here
+    _start = next(gpx.walk(only_points=True))
+    home_dists = [item.distance_3d(_start) for item in gpx.walk(only_points=True)]
+
+    return cum_dists, home_dists

@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from rclogvis.gps import create_gpx_file
+from rclogvis.gps import create_gpx_file, get_distances
 from rclogvis.plotting import (
     use_custom_matplotlib_formatting,
     plot_time_series,
@@ -73,6 +73,11 @@ def main():
     df["latitude"] = pd.to_numeric(df["latitude"])
     df["longitude"] = pd.to_numeric(df["longitude"])
 
+    # gps distances
+    df["CumDist(km)"], df["HomeDist(km)"] = get_distances(df)
+    df["CumDist(km)"] /= 1000.0
+    df["HomeDist(km)"] /= 1000.0
+
     # control link
     fields = [
         "1RSS(dB)",
@@ -82,6 +87,7 @@ def main():
         "TRSS(dB)",
         "TQly(%)",
         "TSNR(dB)",
+        "HomeDist(km)",
     ]
 
     plot_time_series(df, fields, title="Control Link")
@@ -91,7 +97,7 @@ def main():
     plot_histograms(df, fields, title="Control Link Histograms")
 
     # battery
-    fields = ["RxBt(V)", "Curr(A)", "Capa(mAh)", "Bat%(%)", "FM"]
+    fields = ["RxBt(V)", "Curr(A)", "Capa(mAh)", "Bat%(%)", "CumDist(km)", "FM"]
 
     plot_time_series(df, fields, title="Battery")
 
