@@ -1,14 +1,14 @@
-# RCLogVis: Log visualistion for EdgeTX radios #
+# RCLogVis: Telemetry log visualisation for EdgeTX radios #
 
 [![PyPI latest release](https://img.shields.io/pypi/v/rclogvis.svg)](https://pypi.org/project/rclogvis/)
 [![GitHub issues](https://img.shields.io/badge/issue_tracking-GitHub-blue.svg)](https://github.com/fjankowsk/rclogvis/issues/)
 [![License - MIT](https://img.shields.io/pypi/l/rclogvis.svg)](https://github.com/fjankowsk/rclogvis/blob/master/LICENSE)
 
-This repository contains software to visualise the flight telemetry data from drones (e.g. multi rotors or fixed wings) by EdgeTX remote control radios.
+This repository contains software to visualise flight telemetry data from drones (e.g., multi-rotors or fixed-wing) recorded with EdgeTX remote control radios.
 
 ## Author ##
 
-The software is primarily developed and maintained by Fabian Jankowski. For more information feel free to contact me via: fabian.jankowski at cnrs-orleans.fr.
+The software is primarily developed and maintained by Fabian Jankowski. For more information, feel free to contact me via: fabian.jankowski at cnrs-orleans.fr.
 
 ## Installation ##
 
