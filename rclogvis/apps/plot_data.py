@@ -13,6 +13,7 @@ from rclogvis.gps import create_gpx_file, get_distances
 from rclogvis.plotting import (
     use_custom_matplotlib_formatting,
     plot_time_series,
+    plot_gps_heatmap,
     plot_gps_trajectory,
     plot_histograms,
 )
@@ -119,6 +120,9 @@ def main():
     fields = ["Rud", "Ele", "Thr", "Ail"]
 
     plot_time_series(df, fields, title="Stick input")
+
+    # gps heatmap
+    plot_gps_heatmap(df)
 
     # gps trajectory
     plot_gps_trajectory(df)

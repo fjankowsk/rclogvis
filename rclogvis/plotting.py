@@ -50,6 +50,59 @@ def plot_time_series(df, fields, title=""):
     fig.tight_layout()
 
 
+def plot_gps_heatmap(df):
+    x = (df["longitude"] - df["longitude"].iat[0]).values
+    y = (df["latitude"] - df["latitude"].iat[0]).values
+
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    # get the noise contribution from the measured s/n
+    # taking into account the transmitter power
+    # transmitted power in dbm
+    _tpwr_dbm = 10.0 * np.log10(df["TPWR(mW)"])
+    noise = _tpwr_dbm - df["RSNR(dB)"]
+
+    hb = ax.hexbin(x, y, noise, gridsize=11)
+
+    # home point
+    ax.scatter(
+        0,
+        0,
+        s=260,
+        marker="o",
+        facecolor="none",
+        edgecolor="tab:red",
+        zorder=2,
+    )
+    ax.text(
+        0,
+        0,
+        "H",
+        color="tab:red",
+        verticalalignment="center",
+        horizontalalignment="center",
+        zorder=3,
+    )
+
+    plt.colorbar(hb, ax=ax, label="Noise (db)")
+
+    ax.set_xlabel("Longitude (deg)")
+    ax.set_ylabel("Latitude (deg)")
+
+    # set visible area
+    thresh = 0.002
+    xmin = np.minimum(-thresh, 1.2 * x.min())
+    xmax = np.maximum(thresh, 1.2 * x.max())
+    ymin = np.minimum(-thresh, 1.2 * y.min())
+    ymax = np.maximum(thresh, 1.2 * y.max())
+
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(ymin, ymax)
+
+    fig.tight_layout()
+
+
 def plot_gps_trajectory(df):
     x = (df["longitude"] - df["longitude"].iat[0]).values
     y = (df["latitude"] - df["latitude"].iat[0]).values
