@@ -59,7 +59,7 @@ def plot_gps_heatmap(df):
 
     # get the noise contribution from the measured s/n
     # taking into account the transmitter power
-    # transmitted power in dbm
+    # mW -> dBm
     _tpwr_dbm = 10.0 * np.log10(df["TPWR(mW)"])
     noise = _tpwr_dbm - df["RSNR(dB)"]
 
