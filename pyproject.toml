@@ -44,6 +44,7 @@ develop = [
 
 [project.scripts]
 rclogvis-plot = "rclogvis.apps.plot_data:main"
+rclogvis-combine = "rclogvis.apps.combine_csv:main"
 
 [project.urls]
 Homepage = "https://github.com/fjankowsk/rclogvis"

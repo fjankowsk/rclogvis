@@ -30,6 +30,19 @@ The telemetry log files will appear in the "LOGS" directory on the RC handset's 
 ## Usage ##
 
 ```console
+$ rclogvis-combine -h
+usage: rclogvis-combine [-h] files [files ...]
+
+Combine telemetry CSV files.
+
+positional arguments:
+  files       Telemetry CSV files to combine.
+
+options:
+  -h, --help  show this help message and exit
+```
+
+```console
 $ rclogvis-plot -h
 usage: rclogvis-plot [-h] filename
 
