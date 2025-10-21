@@ -5,9 +5,6 @@ build-backend = "setuptools.build_meta"
 [tool.cibuildwheel]
 build-frontend = "build"
 
-[tool.setuptools]
-zip-safe = true
-
 [project]
 name = "rclogvis"
 dynamic = ["version"]
