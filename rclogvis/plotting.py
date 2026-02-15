@@ -87,7 +87,7 @@ def plot_gps_heatmap(df):
 
     plt.colorbar(hb, ax=ax, label="Noise (db)")
 
-    ax.set_title("GPS noise heatmap")
+    ax.set_title("GPS Noise Heatmap")
     ax.set_xlabel("Longitude (deg)")
     ax.set_ylabel("Latitude (deg)")
 
@@ -156,7 +156,7 @@ def plot_gps_trajectory(df):
 
     plt.colorbar(lc, ax=ax, label="Altitude (m)")
 
-    ax.set_title("GPS trajectory")
+    ax.set_title("GPS Trajectory")
     ax.set_xlabel("Longitude (deg)")
     ax.set_ylabel("Latitude (deg)")
 
@@ -173,19 +173,24 @@ def plot_gps_trajectory(df):
     fig.tight_layout()
 
 
-def plot_histograms(df, fields, title=""):
+def plot_histograms(df, fields, abs=False, title=""):
     figsize = (6.4, 7.0)
     fig, axs = plt.subplots(figsize=figsize, nrows=len(fields))
 
     for i, _label in enumerate(fields):
-        axs[i].hist(
-            df[_label], bins="auto", density=True, histtype="step", lw=2, zorder=3
-        )
+        if abs:
+            data = df[_label].abs()
+        else:
+            data = df[_label]
+
+        axs[i].hist(data, bins="auto", density=True, histtype="step", lw=2, zorder=3)
         axs[i].grid()
 
-        axs[i].axvline(x=df[_label].median(), color="C1", ls="dashed", lw=2, zorder=4)
+        axs[i].axvline(x=data.median(), color="C1", ls="dashed", lw=2, zorder=4)
 
         _nice_label = _label.replace("(", " (")
+        if abs:
+            _nice_label = f"abs({_nice_label})"
         axs[i].set_xlabel(_nice_label)
         axs[i].set_ylabel("PDF")
 
