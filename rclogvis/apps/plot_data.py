@@ -119,7 +119,16 @@ def main():
     # stick input
     fields = ["Rud", "Ele", "Thr", "Ail"]
 
-    plot_time_series(df, fields, title="Stick input")
+    plot_time_series(df, fields, title="Stick Input")
+
+    plot_histograms(df, fields, title="Stick Input Histograms", abs=True)
+
+    # channel values
+    fields = ["CH1(us)", "CH2(us)", "CH3(us)", "CH4(us)"]
+
+    plot_time_series(df, fields, title="Channel Values")
+
+    plot_histograms(df, fields, title="Channel Values Histograms")
 
     # gps heatmap
     plot_gps_heatmap(df)
