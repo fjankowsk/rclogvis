@@ -87,6 +87,7 @@ def plot_gps_heatmap(df):
 
     plt.colorbar(hb, ax=ax, label="Noise (db)")
 
+    ax.set_title("GPS noise heatmap")
     ax.set_xlabel("Longitude (deg)")
     ax.set_ylabel("Latitude (deg)")
 
@@ -155,6 +156,7 @@ def plot_gps_trajectory(df):
 
     plt.colorbar(lc, ax=ax, label="Altitude (m)")
 
+    ax.set_title("GPS trajectory")
     ax.set_xlabel("Longitude (deg)")
     ax.set_ylabel("Latitude (deg)")
 
