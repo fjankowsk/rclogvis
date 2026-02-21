@@ -7,6 +7,7 @@ import matplotlib
 from matplotlib.collections import LineCollection
 from matplotlib.patches import FancyArrowPatch
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FormatStrFormatter
 import numpy as np
 
 
@@ -197,4 +198,48 @@ def plot_histograms(df, fields, abs=False, title=""):
     fig.suptitle(title)
 
     fig.align_ylabels()
+    fig.tight_layout()
+
+
+def plot_inv_square_law(df):
+    fig = plt.figure()
+    ax = fig.add_subplot()
+
+    # compensate for the transmitter power
+    # mW -> dB
+    _tpwr_db = 10.0 * np.log10(df["TPWR(mW)"] / df["TPWR(mW)"].min())
+    rss = df["1RSS(dB)"] - _tpwr_db
+
+    # use delta rss (db)
+    rss -= rss.max()
+
+    xmin = df["HomeDist(km)"].min()
+    if not xmin > 0:
+        xmin = 0.06
+    xmax = df["HomeDist(km)"].max()
+
+    binsx = np.geomspace(xmin, xmax, num=25)
+    binsy = np.linspace(rss.min(), rss.max(), num=15)
+
+    ax.hist2d(df["HomeDist(km)"], rss, bins=[binsx, binsy], cmap="Reds", cmin=1)
+
+    # theory comparison
+    distx = np.geomspace(xmin, xmax, num=100)
+    signaly = distx**-2
+    # convert to db
+    signaly = 10.0 * np.log10(signaly / 1.0e4)
+
+    ax.plot(distx, signaly, color="tab:blue", lw=2, ls="dashed", zorder=5)
+
+    ax.set_xlabel("Home Distance (km)")
+    ax.set_ylabel("Normalised Received Signal Strength (dB)")
+
+    ax.set_xlim(left=xmin, right=1.1 * xmax)
+    ax.set_xscale("log")
+
+    sfor = FormatStrFormatter("%g")
+    ax.xaxis.set_major_formatter(sfor)
+
+    fig.suptitle("Inverse Square Law Test")
+
     fig.tight_layout()

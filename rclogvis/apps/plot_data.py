@@ -16,6 +16,7 @@ from rclogvis.plotting import (
     plot_gps_heatmap,
     plot_gps_trajectory,
     plot_histograms,
+    plot_inv_square_law,
 )
 
 
@@ -96,6 +97,8 @@ def main():
     fields = ["1RSS(dB)", "RQly(%)", "RSNR(dB)", "TRSS(dB)"]
 
     plot_histograms(df, fields, title="Control Link Histograms")
+
+    plot_inv_square_law(df)
 
     # battery
     fields = ["RxBt(V)", "Curr(A)", "Capa(mAh)", "Bat%(%)", "CumDist(km)", "FM"]
