@@ -80,6 +80,10 @@ def main():
     df["CumDist(km)"] /= 1000.0
     df["HomeDist(km)"] /= 1000.0
 
+    # output data update rate
+    _rate = df["datetime"].diff().dropna().mode()[0].total_seconds()
+    print(f"Data update rate: {_rate} s")
+
     # control link
     fields = [
         "1RSS(dB)",
