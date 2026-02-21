@@ -58,13 +58,12 @@ def plot_gps_heatmap(df):
     fig = plt.figure()
     ax = fig.add_subplot()
 
-    # get the noise contribution from the measured s/n
-    # taking into account the transmitter power
-    # mW -> dBm
-    _tpwr_dbm = 10.0 * np.log10(df["TPWR(mW)"])
-    noise = _tpwr_dbm - df["RSNR(dB)"]
+    # compensate the measured s/n for the transmitter power
+    # mW -> dB
+    _tpwr_db = 10.0 * np.log10(df["TPWR(mW)"] / df["TPWR(mW)"].min())
+    snr = df["RSNR(dB)"] - _tpwr_db
 
-    hb = ax.hexbin(x, y, noise, gridsize=11)
+    hb = ax.hexbin(x, y, snr, gridsize=11)
 
     # home point
     ax.scatter(
@@ -86,9 +85,8 @@ def plot_gps_heatmap(df):
         zorder=3,
     )
 
-    plt.colorbar(hb, ax=ax, label="Noise (db)")
+    plt.colorbar(hb, ax=ax, label="Received S/N (db)")
 
-    ax.set_title("GPS Noise Heatmap")
     ax.set_xlabel("Longitude (deg)")
     ax.set_ylabel("Latitude (deg)")
 
@@ -101,6 +99,8 @@ def plot_gps_heatmap(df):
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
+
+    fig.suptitle("Control Link S/N Heatmap")
 
     fig.tight_layout()
 
