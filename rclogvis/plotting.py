@@ -9,6 +9,7 @@ from matplotlib.patches import FancyArrowPatch
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FormatStrFormatter
 import numpy as np
+import utm
 
 
 def use_custom_matplotlib_formatting():
@@ -52,8 +53,10 @@ def plot_time_series(df, fields, title=""):
 
 
 def plot_gps_heatmap(df):
-    x = (df["longitude"] - df["longitude"].iat[0]).values
-    y = (df["latitude"] - df["latitude"].iat[0]).values
+    # convert to utm and centre
+    x, y, _, _ = utm.from_latlon(df["latitude"].to_numpy(), df["longitude"].to_numpy())
+    x -= x[0]
+    y -= y[0]
 
     fig = plt.figure()
     ax = fig.add_subplot()
@@ -87,15 +90,16 @@ def plot_gps_heatmap(df):
 
     plt.colorbar(hb, ax=ax, label="Received S/N (db)")
 
-    ax.set_xlabel("Longitude (deg)")
-    ax.set_ylabel("Latitude (deg)")
+    ax.set_xlabel("East - West (m)")
+    ax.set_ylabel("North - South (m)")
 
     # set visible area
-    thresh = 0.002
-    xmin = np.minimum(-thresh, 1.2 * x.min())
-    xmax = np.maximum(thresh, 1.2 * x.max())
-    ymin = np.minimum(-thresh, 1.2 * y.min())
-    ymax = np.maximum(thresh, 1.2 * y.max())
+    thresh = 250.0
+    fact = 1.2
+    xmin = np.minimum(-thresh, fact * x.min())
+    xmax = np.maximum(thresh, fact * x.max())
+    ymin = np.minimum(-thresh, fact * y.min())
+    ymax = np.maximum(thresh, fact * y.max())
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)
@@ -105,9 +109,17 @@ def plot_gps_heatmap(df):
     fig.tight_layout()
 
 
-def plot_gps_trajectory(df):
-    x = (df["longitude"] - df["longitude"].iat[0]).values
-    y = (df["latitude"] - df["latitude"].iat[0]).values
+def plot_gps_trajectory(df, useutm):
+    if useutm:
+        # convert to utm and centre
+        x, y, _, _ = utm.from_latlon(
+            df["latitude"].to_numpy(), df["longitude"].to_numpy()
+        )
+        x -= x[0]
+        y -= y[0]
+    else:
+        x = (df["longitude"] - df["longitude"].iat[0]).values
+        y = (df["latitude"] - df["latitude"].iat[0]).values
 
     points = np.array([x, y]).T.reshape(-1, 1, 2)
     segments = np.concatenate([points[:-1], points[1:]], axis=1)
@@ -158,15 +170,28 @@ def plot_gps_trajectory(df):
     plt.colorbar(lc, ax=ax, label="Altitude (m)")
 
     ax.set_title("GPS Trajectory")
-    ax.set_xlabel("Longitude (deg)")
-    ax.set_ylabel("Latitude (deg)")
+    if useutm:
+        ax.set_xlabel("East - West (m)")
+        ax.set_ylabel("North - South (m)")
+    else:
+        ax.set_xlabel("Longitude (deg)")
+        ax.set_ylabel("Latitude (deg)")
 
     # set visible area
-    thresh = 0.002
-    xmin = np.minimum(-thresh, 1.2 * x.min())
-    xmax = np.maximum(thresh, 1.2 * x.max())
-    ymin = np.minimum(-thresh, 1.2 * y.min())
-    ymax = np.maximum(thresh, 1.2 * y.max())
+    if useutm:
+        thresh = 250.0
+        fact = 1.15
+        xmin = np.minimum(-thresh, fact * x.min())
+        xmax = np.maximum(thresh, fact * x.max())
+        ymin = np.minimum(-thresh, fact * y.min())
+        ymax = np.maximum(thresh, fact * y.max())
+    else:
+        thresh = 0.002
+        fact = 1.2
+        xmin = np.minimum(-thresh, fact * x.min())
+        xmax = np.maximum(thresh, fact * x.max())
+        ymin = np.minimum(-thresh, fact * y.min())
+        ymax = np.maximum(thresh, fact * y.max())
 
     ax.set_xlim(xmin, xmax)
     ax.set_ylim(ymin, ymax)

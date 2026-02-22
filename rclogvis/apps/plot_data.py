@@ -141,7 +141,7 @@ def main():
     plot_gps_heatmap(df)
 
     # gps trajectory
-    plot_gps_trajectory(df)
+    plot_gps_trajectory(df, useutm=True)
 
     # output gpx file
     create_gpx_file(df)
