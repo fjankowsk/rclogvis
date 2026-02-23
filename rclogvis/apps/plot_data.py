@@ -70,6 +70,12 @@ def main():
     df["Roll(deg)"] = df["Roll(rad)"] * 180.0 / np.pi
     df["Yaw(deg)"] = df["Yaw(rad)"] * 180.0 / np.pi
 
+    # spin rate
+    _tsamp = df["datetime"].diff().dt.total_seconds()
+    df["dPtch(deg/s)"] = df["Ptch(deg)"].diff() / _tsamp
+    df["dRoll(deg/s)"] = df["Roll(deg)"].diff() / _tsamp
+    df["dYaw(deg/s)"] = df["Yaw(deg)"].diff() / _tsamp
+
     # split into latitude and longitude
     df[["latitude", "longitude"]] = df["GPS"].str.split(" ", n=1, expand=True)
     df["latitude"] = pd.to_numeric(df["latitude"])
@@ -123,19 +129,27 @@ def main():
 
     plot_time_series(df, fields, title="Attitude")
 
+    # spin rate
+    fields = ["dPtch(deg/s)", "dRoll(deg/s)", "dYaw(deg/s)"]
+
+    plot_time_series(df, fields, title="Spin Rate")
+
+    plot_histograms(df, fields, log=True, title="Spin Rate Histograms", abs=False)
+    plot_histograms(df, fields, log=True, title="Spin Rate Histograms", abs=True)
+
     # stick input
     fields = ["Rud", "Ele", "Thr", "Ail"]
 
     plot_time_series(df, fields, title="Stick Input")
 
-    plot_histograms(df, fields, title="Stick Input Histograms", abs=True)
+    plot_histograms(df, fields, log=True, title="Stick Input Histograms", abs=True)
 
     # channel values
     fields = ["CH1(us)", "CH2(us)", "CH3(us)", "CH4(us)"]
 
     plot_time_series(df, fields, title="Channel Values")
 
-    plot_histograms(df, fields, title="Channel Values Histograms")
+    plot_histograms(df, fields, log=True, title="Channel Values Histograms")
 
     # gps heatmap
     plot_gps_heatmap(df)

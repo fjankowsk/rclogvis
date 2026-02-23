@@ -88,7 +88,7 @@ def plot_gps_heatmap(df):
         zorder=3,
     )
 
-    plt.colorbar(hb, ax=ax, label="Received S/N (db)")
+    plt.colorbar(hb, ax=ax, label="Received S/N (dB)")
 
     ax.set_xlabel("East - West (m)")
     ax.set_ylabel("North - South (m)")
@@ -199,7 +199,7 @@ def plot_gps_trajectory(df, useutm):
     fig.tight_layout()
 
 
-def plot_histograms(df, fields, abs=False, title=""):
+def plot_histograms(df, fields, abs=False, log=False, title=""):
     figsize = (6.4, 7.0)
     fig, axs = plt.subplots(figsize=figsize, nrows=len(fields))
 
@@ -219,6 +219,8 @@ def plot_histograms(df, fields, abs=False, title=""):
             _nice_label = f"abs({_nice_label})"
         axs[i].set_xlabel(_nice_label)
         axs[i].set_ylabel("PDF")
+        if log:
+            axs[i].set_yscale("log")
 
     fig.suptitle(title)
 
